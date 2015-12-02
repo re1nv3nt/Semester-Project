@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.scene.web.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
@@ -7,7 +8,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.LeverInc.Project.EliteBrowserController">
    <children>
-      <TextField fx:id="tfAddressBar" layoutX="226.0" layoutY="25.0" promptText="Enter html address here" />
-      <WebView fx:id="webView" layoutX="200.0" layoutY="92.0" prefHeight="200.0" prefWidth="200.0" />
+      <TextField fx:id="tfAddressBar" alignment="TOP_LEFT" layoutX="10.0" layoutY="14.0" onKeyReleased="#onEnterPress" prefHeight="25.0" prefWidth="505.0" promptText="Enter html address here" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="85.0" AnchorPane.topAnchor="14.0" />
+      <WebView fx:id="webView" layoutX="4.0" layoutY="47.0" prefHeight="349.0" prefWidth="592.0" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="47.0" />
    </children>
 </AnchorPane>
