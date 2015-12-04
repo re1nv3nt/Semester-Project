@@ -1,14 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
 <?import javafx.scene.web.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.LeverInc.Project.EliteBrowserController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="491.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.LeverInc.Project.EliteBrowserController">
    <children>
-      <TextField fx:id="tfAddressBar" alignment="TOP_LEFT" layoutX="10.0" layoutY="14.0" onKeyReleased="#onEnterPress" prefHeight="25.0" prefWidth="505.0" promptText="Enter html address here" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="85.0" AnchorPane.topAnchor="14.0" />
-      <WebView fx:id="webView" layoutX="4.0" layoutY="47.0" prefHeight="349.0" prefWidth="592.0" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="47.0" />
+      <TextField fx:id="tfAddressBar" layoutX="14.0" layoutY="27.0" onKeyReleased="#onEnterPress" prefHeight="25.0" prefWidth="528.0" promptText="Enter html address here" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="40.0" />
+      <WebView fx:id="webView" layoutX="200.0" layoutY="57.0" prefHeight="433.0" prefWidth="598.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="75.0" />
+      <Button fx:id="btnGo" layoutX="539.0" layoutY="27.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="38.0" text="Go!" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="40.0" />
+      <MenuBar fx:id="MenuBar" layoutX="5.0" layoutY="2.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem fx:id="close" mnemonicParsing="false" onAction="#browserClose" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
    </children>
 </AnchorPane>

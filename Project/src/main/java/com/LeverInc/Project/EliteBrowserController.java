@@ -1,15 +1,14 @@
 package com.LeverInc.Project;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
+import javafx.scene.control.*;
+import javafx.scene.web.*;
+import javafx.scene.input.*;
+import javafx.scene.layout.*;
 
-public class EliteBrowserController {
-	String address = "http://www.google.com";
+public class EliteBrowserController extends Region{
+	public String address = "http://www.google.com";
 	
     @FXML
     private WebView webView;
@@ -20,10 +19,32 @@ public class EliteBrowserController {
     @FXML
     private Button btnGo;
 
+    @FXML
+    private MenuBar MenuBar;
+
+    @FXML
+    private MenuItem close;
+
     public void initialize(){
-        WebEngine webEngine = webView.getEngine();
-        tfAddressBar.setText(address);
-        webEngine.load(tfAddressBar.getText());
+    WebEngine webEngine = webView.getEngine();
+    tfAddressBar.setText(address);
+    webEngine.load(address);
+    }
+    
+    public String addressCorrection(){
+    	if(address.startsWith("https://")){
+    		return address;
+    	}else{
+    		address = "http://" + address;
+    	}
+    	
+    	if(address.startsWith("http://")){
+    		return address;
+    	} else{
+    		address = "http://" + address;
+    		return address;
+    	}
+    	
     }
     
     @FXML
@@ -34,14 +55,12 @@ public class EliteBrowserController {
     		webEngine.load(addressCorrection());
     	}
     }
-    
-    public String addressCorrection(){
-    	if(address.substring(0, 7).equals("http://")){
-    		return address;
-    	} else{
-    		address = "http://" + address;
-    		return address;
-    	}
+
+
+    @FXML
+    void browserClose(ActionEvent event) {
+    	System.exit(0);
     }
+
     
 }
