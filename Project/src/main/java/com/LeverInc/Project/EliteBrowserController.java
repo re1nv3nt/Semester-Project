@@ -4,8 +4,10 @@ import java.io.IOException;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -22,6 +24,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebHistory;
+import javafx.scene.web.WebHistory.Entry;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
@@ -39,7 +43,7 @@ public class EliteBrowserController extends Region {
 	@FXML
 	private MenuBar MenuBar;
 	@FXML
-	private ComboBox<?> comboHistory;
+	private ComboBox<String> comboHistory;
 	@FXML
     private MenuItem about;
     @FXML
@@ -77,11 +81,43 @@ public class EliteBrowserController extends Region {
 		engine.locationProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observableValue, String oldLoc, String newLoc) {
-				// getHistory().executeNav(newLoc); // update the history lists.
+				//getHistory().executeNav(newLoc); // update the history lists.
 				getAddress().setText(newLoc); // update the location field.
 				// favicon.set(favIconHandler.fetchFavIcon(newLoc));
 			}
 		});
+		
+		// Retrieves web history
+		final WebHistory history = engine.getHistory();
+		history.getEntries().addListener(new 
+		    ListChangeListener<WebHistory.Entry>() {
+		        @Override
+		        public void onChanged(Change<? extends Entry> c) {
+		            c.next();
+		            
+		            //StringTokenizer tokenizer
+		            
+		            for (Entry e : c.getRemoved()) {
+		                comboHistory.getItems().remove(e.getUrl());
+		            }
+		            for (Entry e : c.getAddedSubList()) {
+		                
+		            	comboHistory.getItems().add(e.getUrl());
+		            }
+		        }
+		    }
+		);
+		
+//		comboHistory.setPrefWidth(60);
+//		comboHistory.setOnAction(new EventHandler<ActionEvent>() {
+//		    @Override
+//		    public void handle(ActionEvent ev) {
+//		        int offset =
+//		        		comboHistory.getSelectionModel().getSelectedIndex()
+//		                - history.getCurrentIndex();
+//		        history.go(offset);
+//		    }
+//		});
 
 		// Worker object used to track load progress
 		Worker<?> worker = engine.getLoadWorker();
