@@ -13,11 +13,12 @@
             <Font size="14.0" />
          </font></TextField>
       <WebView fx:id="webView" layoutX="200.0" layoutY="72.0" prefHeight="418.0" prefWidth="598.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="72.0" />
-      <Button fx:id="btnRefresh" layoutX="469.0" layoutY="36.0" mnemonicParsing="false" onAction="#refreshClickListener" prefHeight="30.0" prefWidth="36.0" text="R" AnchorPane.rightAnchor="95.0" AnchorPane.topAnchor="36.0" />
+      <Button fx:id="btnRefresh" layoutX="469.0" layoutY="36.0" mnemonicParsing="false" onAction="#refreshClickListener" prefHeight="30.0" prefWidth="36.0" AnchorPane.rightAnchor="95.0" AnchorPane.topAnchor="36.0" />
       <MenuBar fx:id="MenuBar" layoutX="5.0" layoutY="2.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
+              <MenuItem fx:id="newWindow" mnemonicParsing="false" onAction="#openNewWindow" text="New Window" />
               <MenuItem fx:id="close" mnemonicParsing="false" onAction="#browserClose" text="Close" />
             </items>
           </Menu>
@@ -28,7 +29,7 @@
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
             <items>
-              <MenuItem mnemonicParsing="false" text="About" />
+              <MenuItem fx:id="about" mnemonicParsing="false" onAction="#aboutButton" text="About EliteBrowser" />
             </items>
           </Menu>
         </menus>

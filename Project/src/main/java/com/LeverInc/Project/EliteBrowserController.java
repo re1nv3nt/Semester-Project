@@ -1,21 +1,29 @@
 package com.LeverInc.Project;
 
+import java.io.IOException;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import javafx.stage.Stage;
 
 public class EliteBrowserController extends Region {
 	private String address = "https://google.com/";
@@ -32,6 +40,10 @@ public class EliteBrowserController extends Region {
 	private MenuBar MenuBar;
 	@FXML
 	private ComboBox<?> comboHistory;
+	@FXML
+    private MenuItem about;
+    @FXML
+    private MenuItem newWindow;
 	@FXML
 	private MenuItem close;
 
@@ -51,8 +63,15 @@ public class EliteBrowserController extends Region {
 		// Displays the current URL after successful page load
 		tfAddressBar.setText(engine.getLocation());
 
-		// Address bar helpful tool-tip
-		tfAddressBar.setTooltip(new Tooltip("Enter your destination URL, and may the force be with you"));
+		// Address bar helpful tool-tip text and image
+		final Tooltip addressTooltip = new Tooltip("\"Enter your destination URL, and may the force be with you\"");
+		Image image = new Image(getClass().getResourceAsStream("Resources/Vader.jpg"));
+		addressTooltip.setGraphic(new ImageView(image));
+		tfAddressBar.setTooltip(addressTooltip);
+		
+		// Refresh button graphic
+		Image refreshImage = new Image(getClass().getResourceAsStream("Resources/Refresh.png"));
+		btnRefresh.setGraphic(new ImageView(refreshImage));
 
 		// Updates address bar on link clicks
 		engine.locationProperty().addListener(new ChangeListener<String>() {
@@ -72,9 +91,9 @@ public class EliteBrowserController extends Region {
 					Throwable newThrowable) {
 				System.out.println("Browser encountered a load exception: " + newThrowable);
 				loadSuccess = false;
-				// If page cannot be loaded due to exception, will load a PAGE NOT FOUND message
+				// If page cannot be loaded due to load exception, will load a PAGE NOT FOUND message
 				if (!loadSuccess) {
-					engine.load(EliteBrowserController.class.getResource("404.htm").toExternalForm());
+					engine.load(EliteBrowserController.class.getResource("Resources/404.htm").toExternalForm());
 					tfAddressBar.setText(address);
 					loadSuccess = true;
 				}
@@ -82,7 +101,7 @@ public class EliteBrowserController extends Region {
 		});
 	}
 
-	// Corrects user input URL with proper HTML prefix
+	// Corrects user input URL with proper HTML prefix, or defers to Google search
 	public String addressCorrection() {
 		if (address == null) {address = "";}
 
@@ -108,9 +127,27 @@ public class EliteBrowserController extends Region {
 	}
 	
 	@FXML	// Refreshes the page
-	void refreshClickListener(ActionEvent event) {
+	public void refreshClickListener(ActionEvent event) {
 		engine.reload();
 	}
+	
+	@FXML	// Displays an "About" window
+    public void aboutButton(ActionEvent event) throws IOException {
+    	Parent root = FXMLLoader.load(getClass().getResource("About.fxml"));
+    	Stage stage = new Stage();
+    	stage.setScene(new Scene(root, 200, 400));
+    	stage.show();
+    }
+	
+	@FXML	// Opens an entirely new browser window
+    public void openNewWindow(ActionEvent Event) throws IOException {
+    	Stage stage = new Stage();
+    	Parent parent = FXMLLoader.load(getClass().getResource("EliteBrowser.fxml"));
+		Scene scene = new Scene(parent);
+		stage.setTitle("Elite Browser");
+		stage.setScene(scene);
+		stage.show();
+    }
 
 	@FXML // Exits the program
 	public void browserClose(ActionEvent event) {
