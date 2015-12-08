@@ -64,14 +64,15 @@ public class EliteBrowserController extends Region {
 			}
 		});
 
+		// Worker object used to track load progress
 		Worker<?> worker = engine.getLoadWorker();
-
 		worker.exceptionProperty().addListener(new ChangeListener<Throwable>() {
 			@Override
 			public void changed(ObservableValue<? extends Throwable> observableValue, Throwable oldThrowable,
 					Throwable newThrowable) {
 				System.out.println("Browser encountered a load exception: " + newThrowable);
 				loadSuccess = false;
+				// If page cannot be loaded due to exception, will load a PAGE NOT FOUND message
 				if (!loadSuccess) {
 					engine.load(EliteBrowserController.class.getResource("404.htm").toExternalForm());
 					tfAddressBar.setText(address);
@@ -93,8 +94,8 @@ public class EliteBrowserController extends Region {
 
 		return address;
 	}
-
-	@FXML
+	
+	@FXML	// Loads text from address bar on ENTER press
 	public void onEnterPress(KeyEvent event) {
 		if (event.getCode() == KeyCode.ENTER) {
 			// Assigns user input text from address bar to "address" String
@@ -105,8 +106,8 @@ public class EliteBrowserController extends Region {
 			tfAddressBar.setText(engine.getLocation());
 		}
 	}
-
-	@FXML
+	
+	@FXML	// Refreshes the page
 	void refreshClickListener(ActionEvent event) {
 		engine.reload();
 	}
