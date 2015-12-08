@@ -1,11 +1,19 @@
 package com.LeverInc.Project;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.scene.web.*;
-import javafx.scene.input.*;
-import javafx.scene.layout.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Region;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 
 public class EliteBrowserController extends Region{
 	private String address = "https://google.com/";
@@ -38,6 +46,14 @@ public class EliteBrowserController extends Region{
 		tfAddressBar.setText(engine.getLocation());
 		// Address bar helpful tool-tip
 	    tfAddressBar.setTooltip(new Tooltip("Enter your destination URL, and may the force be with you"));
+	    // Updates address bar on link clicks
+	    engine.locationProperty().addListener(new ChangeListener<String>() {
+	        @Override public void changed(ObservableValue<? extends String> observableValue, String oldLoc, String newLoc) {
+//	          getHistory().executeNav(newLoc); // update the history lists.
+	          getAddress().setText(newLoc);   // update the location field.
+//	          favicon.set(favIconHandler.fetchFavIcon(newLoc));
+	        }
+	      });
     }
     
     // Corrects user input URL with proper HTML prefix
