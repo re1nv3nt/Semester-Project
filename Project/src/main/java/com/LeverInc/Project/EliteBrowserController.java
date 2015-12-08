@@ -8,28 +8,35 @@ import javafx.scene.input.*;
 import javafx.scene.layout.*;
 
 public class EliteBrowserController extends Region{
-	public String address = "http://www.google.com";
+	private String address = "https://google.com/";
+    private WebEngine engine;
 	
     @FXML
     private WebView webView;
-
     @FXML
     private TextField tfAddressBar;
-
     @FXML
     private Button btnGo;
-
     @FXML
     private MenuBar MenuBar;
-
     @FXML
     private MenuItem close;
+    
+    public TextField getAddress() {
+        return tfAddressBar;
+    }
+
+	public WebView getView() {
+	    return webView;
+	}
 
     public void initialize(){
-	    WebEngine webEngine = webView.getEngine();
+    	engine = getView().getEngine();
 	    tfAddressBar.setText(address);
-	    webEngine.load(address);
-	    // Address bar helpful tooltip
+	    engine.load(address);
+	    // Displays the current URL after successful page load
+		tfAddressBar.setText(engine.getLocation());
+		// Address bar helpful tool-tip
 	    tfAddressBar.setTooltip(new Tooltip("Enter your destination URL, and may the force be with you"));
     }
     
@@ -48,19 +55,16 @@ public class EliteBrowserController extends Region{
     	if(event.getCode() == KeyCode.ENTER){
     		// Assigns user input text from address bar to "address" String
     		address = tfAddressBar.getText();
-    		WebEngine webEngine = webView.getEngine();
     		// Properly loads new URL with addressCorrection method
-    		webEngine.load(addressCorrection());
+    		engine.load(addressCorrection());
     		// Displays the current URL after successful page load
-    		tfAddressBar.setText(webEngine.getLocation());
+    		tfAddressBar.setText(engine.getLocation());
     	}
     }
 
-    // Exits the program
-    @FXML
+    @FXML	// Exits the program
     void browserClose(ActionEvent event) {
     	System.exit(0);
     }
-
-    
+ 
 }
