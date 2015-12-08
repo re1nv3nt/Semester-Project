@@ -1,13 +1,13 @@
 package com.LeverInc.Project;
 
 import java.io.IOException;
+import java.util.StringTokenizer;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -95,14 +95,14 @@ public class EliteBrowserController extends Region {
 		        public void onChanged(Change<? extends Entry> c) {
 		            c.next();
 		            
-		            //StringTokenizer tokenizer
+		            StringTokenizer strTokenizer;
 		            
 		            for (Entry e : c.getRemoved()) {
 		                comboHistory.getItems().remove(e.getUrl());
 		            }
 		            for (Entry e : c.getAddedSubList()) {
-		                
-		            	comboHistory.getItems().add(e.getUrl());
+		                strTokenizer = new StringTokenizer(e.getUrl(), "?");
+		            	comboHistory.getItems().add(strTokenizer.nextToken());
 		            }
 		        }
 		    }
