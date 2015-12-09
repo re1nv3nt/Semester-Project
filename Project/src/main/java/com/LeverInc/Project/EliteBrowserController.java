@@ -41,6 +41,8 @@ public class EliteBrowserController extends Region {
 	@FXML
 	private Button btnRefresh;
 	@FXML
+    private Button btnFav;
+	@FXML
 	private MenuBar MenuBar;
 	@FXML
 	private ComboBox<String> comboHistory;
@@ -76,21 +78,19 @@ public class EliteBrowserController extends Region {
 		// Refresh button graphic
 		Image refreshImage = new Image(getClass().getResourceAsStream("Resources/Refresh.png"));
 		btnRefresh.setGraphic(new ImageView(refreshImage));
+		
+		// Refresh button graphic
+			Image favoriteImage = new Image(getClass().getResourceAsStream("Resources/Fav.png"));
+			btnFav.setGraphic(new ImageView(favoriteImage));
 
 		// Updates address bar on link clicks
-		engine.locationProperty().addListener(new ChangeListener<String>() {
-			@Override
-			public void changed(ObservableValue<? extends String> observableValue, String oldLoc, String newLoc) {
-				//getHistory().executeNav(newLoc); // update the history lists.
-				getAddress().setText(newLoc); // update the location field.
-				// favicon.set(favIconHandler.fetchFavIcon(newLoc));
-			}
-		});
-		
+		engine.locationProperty().addListener((observableValue, oldLac, newLoc) ->
+			getAddress().setText(newLoc) // update the location field.
+			);
+
 		// Retrieves web history
 		final WebHistory history = engine.getHistory();
-		history.getEntries().addListener(new 
-		    ListChangeListener<WebHistory.Entry>() {
+		history.getEntries().addListener(new ListChangeListener<WebHistory.Entry>() {
 		        @Override
 		        public void onChanged(Change<? extends Entry> c) {
 		            c.next();
@@ -107,17 +107,6 @@ public class EliteBrowserController extends Region {
 		        }
 		    }
 		);
-		
-//		comboHistory.setPrefWidth(60);
-//		comboHistory.setOnAction(new EventHandler<ActionEvent>() {
-//		    @Override
-//		    public void handle(ActionEvent ev) {
-//		        int offset =
-//		        		comboHistory.getSelectionModel().getSelectedIndex()
-//		                - history.getCurrentIndex();
-//		        history.go(offset);
-//		    }
-//		});
 
 		// Worker object used to track load progress
 		Worker<?> worker = engine.getLoadWorker();
@@ -146,7 +135,6 @@ public class EliteBrowserController extends Region {
 		} else if (!(address.startsWith("http://") || address.startsWith("https://")) && !address.isEmpty()) {
 			address = "http://" + address; // default to http prefix
 		}
-
 		return address;
 	}
 	
@@ -166,6 +154,13 @@ public class EliteBrowserController extends Region {
 	public void refreshClickListener(ActionEvent event) {
 		engine.reload();
 	}
+	
+	@FXML	// Stores current URL as a Favorite
+    void favoriteClickListener(ActionEvent event) {
+		//FavoriteURL favURL = new FavoriteURL(getAddress().getText() ); // This was an idea for using a FavoriteURL class method to store urls in an array
+																		// which could then be passed to the databse
+		System.out.printf("Address Added: %s", getAddress().getText());
+    }
 	
 	@FXML	// Displays an "About" window
     public void aboutButton(ActionEvent event) throws IOException {
