@@ -15,10 +15,6 @@ import javafx.stage.Stage;
 public class App extends Application
 {
 	public static void main(String[] args) {
-		// JavaFX GUI to lookup and update records
-		launch(args);
-		
-		
 		try {
 			// Create and load the database
 			Connection conn = DriverManager.getConnection(Environment.DB_URL);
@@ -70,6 +66,10 @@ public class App extends Application
 			System.out.println("Error: " + e.getMessage());
 			e.printStackTrace();
 		}
+		
+		// JavaFX GUI to lookup and update records
+		launch(args);
+		
 	}
 
 	// Method for inserting new favorite url(s) into Favorites Table
