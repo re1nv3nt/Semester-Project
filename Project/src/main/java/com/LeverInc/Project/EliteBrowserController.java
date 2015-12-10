@@ -1,13 +1,22 @@
 package com.LeverInc.Project;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -32,7 +41,8 @@ import javafx.stage.Stage;
 public class EliteBrowserController extends Region {
 	private String address = "https://google.com/";
 	private WebEngine engine;
-	boolean loadSuccess = true;
+	private boolean loadSuccess = true;
+	private ArrayList<Favorite> favlist = new ArrayList<>();
 
 	@FXML
 	private WebView webView;
@@ -88,7 +98,7 @@ public class EliteBrowserController extends Region {
 			getAddress().setText(newLoc) // update the location field.
 			);
 
-		// Retrieves web history
+		// Stores current page via WebHistory into History combo box
 		final WebHistory history = engine.getHistory();
 		history.getEntries().addListener(new ListChangeListener<WebHistory.Entry>() {
 		        @Override
@@ -107,6 +117,17 @@ public class EliteBrowserController extends Region {
 		        }
 		    }
 		);
+		
+		// Loads page from History combo box
+		comboHistory.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent ev) {
+                int offset =
+                        comboHistory.getSelectionModel().getSelectedIndex()
+                        - history.getCurrentIndex();
+                history.go(offset);
+            }
+        });
 
 		// Worker object used to track load progress
 		Worker<?> worker = engine.getLoadWorker();
@@ -124,6 +145,22 @@ public class EliteBrowserController extends Region {
 				}
 			}
 		});
+	}
+	
+	// Accesses DOM API to get the title of the current web page
+	public String getTitle() {
+	    Document doc = engine.getDocument();
+	    NodeList heads = doc.getElementsByTagName("head");
+	    String titleText = engine.getLocation() ; // use location if page does not define a title
+	    if (heads.getLength() > 0) {
+	        Element head = (Element)heads.item(0);
+	        NodeList titles = head.getElementsByTagName("title");
+	        if (titles.getLength() > 0) {
+	            org.w3c.dom.Node title = titles.item(0);
+	            titleText = title.getTextContent();
+	        }
+	    }
+	    return titleText ;
 	}
 
 	// Corrects user input URL with proper HTML prefix, or defers to Google search
@@ -156,11 +193,37 @@ public class EliteBrowserController extends Region {
 	}
 	
 	@FXML	// Stores current URL as a Favorite
-    void favoriteClickListener(ActionEvent event) {
+    public void favoriteClickListener(ActionEvent event) throws SQLException {
 		//FavoriteURL favURL = new FavoriteURL(getAddress().getText() ); // This was an idea for using a FavoriteURL class method to store urls in an array
 																		// which could then be passed to the databse
-		System.out.printf("Address Added: %s", getAddress().getText());
+		Favorite newFav = new Favorite(getTitle(), getAddress().getText());
+		
+		boolean unique = true;
+		for(int i = 0; i < getFavlist().size(); i++){
+			if((getFavlist().get(i) != null) && (newFav == getFavlist().get(i))){
+				unique = false;
+			}
+		}
+		
+		if(unique){
+			getFavlist().add(newFav);
+		}
+		
+		Connection conn = DriverManager.getConnection(Environment.DB_URL);
+		System.out.println("Connection created to DB!");
+		
+		App.addFavorite(conn, newFav.getName(), newFav.getURL());
+		System.out.printf("\nTitle: %s\n", newFav.getName());
+		System.out.printf("Address Added: %s\n", newFav.getURL());
+		
+		conn.close();
+		System.out.println("Connection closed.");
+		
     }
+	
+	public ArrayList<Favorite> getFavlist() {
+		return favlist;
+	}
 	
 	@FXML	// Displays an "About" window
     public void aboutButton(ActionEvent event) throws IOException {

@@ -35,6 +35,6 @@
         </menus>
       </MenuBar>
       <ComboBox fx:id="comboHistory" layoutX="512.0" layoutY="36.0" prefHeight="30.0" prefWidth="84.0" promptText="History" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="36.0" />
-      <Button fx:id="btnFav" layoutX="467.0" layoutY="36.0" mnemonicParsing="false" onAction="#favoriteClickListener" prefHeight="30.0" prefWidth="36.0" />
+      <Button fx:id="btnFav" layoutX="467.0" layoutY="36.0" mnemonicParsing="false" onAction="#favoriteClickListener" prefHeight="30.0" prefWidth="36.0" AnchorPane.rightAnchor="97.0" AnchorPane.topAnchor="36.0" />
    </children>
 </AnchorPane>
