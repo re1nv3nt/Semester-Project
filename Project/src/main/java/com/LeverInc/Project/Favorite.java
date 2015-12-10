@@ -1,12 +1,11 @@
 package com.LeverInc.Project;
 
 public class Favorite extends URL{
-	private String url = "";
 	private String name = "";
 
 	public Favorite(String name, String url){
 		this.name = name;
-		this.url = url;
+		super.url = url;
 	}
 	
 	public String getName() {
@@ -15,14 +14,6 @@ public class Favorite extends URL{
 
 	public void setName(String name) {
 		this.name = name;
-	}
-	
-	public String getURL(){
-		return url;
-	}
-
-	public void setURL(String url){
-		this.url = url;
 	}
 	
 	@Override	// Compares two Favorite objects

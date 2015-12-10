@@ -44,7 +44,7 @@ public class EliteBrowserController extends Region {
 	private boolean loadSuccess = true;
 
 	@FXML
-    public AnchorPane anchor;
+    private AnchorPane anchor;
 	@FXML
 	private WebView webView;
 	@FXML
@@ -133,15 +133,18 @@ public class EliteBrowserController extends Region {
 
 		// Address bar helpful tool-tip text and image
 		final Tooltip addressTooltip = new Tooltip("Enter your destination URL, and may the force be with you");
-		Image vader = new Image(getClass().getResourceAsStream("Resources/Vader.jpg"));
-		addressTooltip.setGraphic(new ImageView(vader));
+		Image vaderImg = new Image(getClass().getResourceAsStream("Resources/Vader.jpg"));
+		addressTooltip.setGraphic(new ImageView(vaderImg));
 		tfAddressBar.setTooltip(addressTooltip);
 		
 		// URL notification label setup
-		Image image = new Image(getClass().getResourceAsStream("Resources/DeathStar.png"));
-		lblURLNote.setGraphic(new ImageView(image));
-		lblURLNote.setTooltip(new Tooltip("Death Star is watching"));
-		
+		Image sslImg = new Image(getClass().getResourceAsStream("Resources/SSL.png"));
+		Tooltip sslTip = new Tooltip("This site uses a secure connection");
+		Image eduImg = new Image(getClass().getResourceAsStream("Resources/EDU.png"));
+		Tooltip eduTip = new Tooltip("This is an education web site");
+		Image deathStarImg = new Image(getClass().getResourceAsStream("Resources/DeathStar.png"));
+		Tooltip normTip = new Tooltip("Death Star is watching");
+
 		// Refresh button setup
 		Image refreshImage = new Image(getClass().getResourceAsStream("Resources/Refresh.png"));
 		btnRefresh.setGraphic(new ImageView(refreshImage));
@@ -196,6 +199,20 @@ public class EliteBrowserController extends Region {
 		            c.next();
 		            StringTokenizer strTokenizer;
 		            
+		            // Changes Notification icon to the right of address bar 
+		            if(HTTPS.isHTTPS(engine.getLocation())){
+		    			//System.out.println("Browsing HTTPS site!\n");
+		    			lblURLNote.setGraphic(new ImageView(sslImg));
+		    			lblURLNote.setTooltip(sslTip);
+		    		} else if (EDU.isEDU(engine.getLocation())){
+		    			lblURLNote.setGraphic(new ImageView(eduImg));
+		    			lblURLNote.setTooltip(eduTip);
+		    		} else{
+		    			lblURLNote.setGraphic(new ImageView(deathStarImg));
+		    			lblURLNote.setTooltip(normTip);
+		    		}
+		            
+		            // Get url from WebHistory and adds it to History ComboBox
 		            for (Entry e : c.getRemoved()) {
 		                comboHistory.getItems().remove(e.getUrl());
 		            }
@@ -243,7 +260,7 @@ public class EliteBrowserController extends Region {
 		if (address.contains(" ")) {
 			address = "https://www.google.com/search?q=" + address.trim().replaceAll(" ", "+");
 		} else if (!(address.startsWith("http://") || address.startsWith("https://")) && !address.isEmpty()) {
-			address = "http://" + address; // default to http prefix
+			address = "http://www." + address; // default to http prefix
 		}
 		return address;
 	}
