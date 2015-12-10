@@ -1,8 +1,6 @@
 package com.LeverInc.Project;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
@@ -23,7 +21,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
@@ -49,6 +49,8 @@ public class EliteBrowserController extends Region {
 	@FXML
 	private TextField tfAddressBar;
 	@FXML
+    private Label lblURLNote;
+	@FXML
 	private Button btnRefresh;
 	@FXML
     private Button btnFav;
@@ -56,6 +58,8 @@ public class EliteBrowserController extends Region {
 	private MenuBar MenuBar;
 	@FXML
 	private ComboBox<String> comboHistory;
+	@FXML
+    private MenuButton menuButtonFavorites;
 	@FXML
     private MenuItem about;
     @FXML
@@ -81,9 +85,13 @@ public class EliteBrowserController extends Region {
 
 		// Address bar helpful tool-tip text and image
 		final Tooltip addressTooltip = new Tooltip("\"Enter your destination URL, and may the force be with you\"");
-		Image image = new Image(getClass().getResourceAsStream("Resources/Vader.jpg"));
-		addressTooltip.setGraphic(new ImageView(image));
+		Image vader = new Image(getClass().getResourceAsStream("Resources/Vader.jpg"));
+		addressTooltip.setGraphic(new ImageView(vader));
 		tfAddressBar.setTooltip(addressTooltip);
+		
+		// URL notification label setup
+		Image image = new Image(getClass().getResourceAsStream("Resources/DeathStar.png"));
+		lblURLNote.setGraphic(new ImageView(image));
 		
 		// Refresh button graphic
 		Image refreshImage = new Image(getClass().getResourceAsStream("Resources/Refresh.png"));
@@ -92,6 +100,10 @@ public class EliteBrowserController extends Region {
 		// Refresh button graphic
 			Image favoriteImage = new Image(getClass().getResourceAsStream("Resources/Fav.png"));
 			btnFav.setGraphic(new ImageView(favoriteImage));
+		
+		// Clears default MenuButton menu items
+		menuButtonFavorites.getItems().clear();
+		//menuButtonFavorites.getItems()
 
 		// Updates address bar on link clicks
 		engine.locationProperty().addListener((observableValue, oldLac, newLoc) ->
@@ -192,38 +204,37 @@ public class EliteBrowserController extends Region {
 		engine.reload();
 	}
 	
+	public ArrayList<Favorite> getFavlist() {
+		return favlist;
+	}
+	
 	@FXML	// Stores current URL as a Favorite
     public void favoriteClickListener(ActionEvent event) throws SQLException {
-		//FavoriteURL favURL = new FavoriteURL(getAddress().getText() ); // This was an idea for using a FavoriteURL class method to store urls in an array
-																		// which could then be passed to the databse
 		Favorite newFav = new Favorite(getTitle(), getAddress().getText());
-		
 		boolean unique = true;
+		
 		for(int i = 0; i < getFavlist().size(); i++){
 			if((getFavlist().get(i) != null) && (newFav == getFavlist().get(i))){
 				unique = false;
 			}
 		}
-		
 		if(unique){
 			getFavlist().add(newFav);
 		}
 		
-		Connection conn = DriverManager.getConnection(Environment.DB_URL);
-		System.out.println("Connection created to DB!");
+		Environment.addFavorite(newFav.getName(), newFav.getURL());
 		
-		App.addFavorite(conn, newFav.getName(), newFav.getURL());
+		// Adds new favorites to MenuButton list
+		menuButtonFavorites.getItems().addAll(new MenuItem(newFav.getName()));
 		System.out.printf("\nTitle: %s\n", newFav.getName());
 		System.out.printf("Address Added: %s\n", newFav.getURL());
-		
-		conn.close();
-		System.out.println("Connection closed.");
-		
     }
 	
-	public ArrayList<Favorite> getFavlist() {
-		return favlist;
-	}
+	@FXML
+    public void onFavoriteClick(ActionEvent event) {
+		System.out.println("MenuButton CLicked!");
+		// WORK IN PROGRESS
+    }
 	
 	@FXML	// Displays an "About" window
     public void aboutButton(ActionEvent event) throws IOException {
