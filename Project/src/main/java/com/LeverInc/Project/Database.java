@@ -37,26 +37,6 @@ public class Database {
 			// 3. Execute the statement
 			stmt.execute(sqlCreateTable);
 			// TABLE IS CREATED!
-
-//			Environment.addFavorite("Google", "google.com");
-//			Environment.addFavorite("Amazon", "amazon.com");
-//			Environment.addFavorite("Facebook", "facebook.com");
-//			Environment.addFavorite("Twitch", "twitch.tv");
-//			Environment.addFavorite("CNN", "cnn.com");
-
-			String selectStatement = "SELECT Fav_ID, Fav_Name, Fav_URL FROM Favorites";
-			ResultSet result = stmt.executeQuery(selectStatement);
-
-			// Prints out favorites
-			System.out.println("\n-----------------FAVORITES-----------------\n");
-
-			while (result.next()) {
-				System.out.printf("%-4d %-10s %-10s\n", result.getInt("Fav_ID"), result.getString("Fav_Name"), result.getString("Fav_URL"));
-				//System.out.printf("%d \t %s\n", result.getInt("Fav_ID"), result.getString("Fav_Name"));
-				//System.out.printf("\t %s \n\n", result.getString("Fav_URL"));
-			}
-
-			System.out.println("\n-------------------------------------------\n");
 			
 			try {
 				String dropTable = "drop table Preferences";
@@ -77,6 +57,26 @@ public class Database {
 			String insertPreference = String.format(
 					"INSERT into Preferences(Window_Color)" + " values ('#F9F9F9')");
 			stmt.executeUpdate(insertPreference);
+
+//			Environment.addFavorite("Google", "google.com");
+//			Environment.addFavorite("Amazon", "amazon.com");
+//			Environment.addFavorite("Facebook", "facebook.com");
+//			Environment.addFavorite("Twitch", "twitch.tv");
+//			Environment.addFavorite("CNN", "cnn.com");
+
+			String selectStatement = "SELECT Fav_ID, Fav_Name, Fav_URL FROM Favorites";
+			ResultSet result = stmt.executeQuery(selectStatement);
+
+			// Prints out favorites
+			System.out.println("\n-----------------FAVORITES-----------------\n");
+
+			while (result.next()) {
+				System.out.printf("%-4d %-10s %-10s\n", result.getInt("Fav_ID"), result.getString("Fav_Name"), result.getString("Fav_URL"));
+				//System.out.printf("%d \t %s\n", result.getInt("Fav_ID"), result.getString("Fav_Name"));
+				//System.out.printf("\t %s \n\n", result.getString("Fav_URL"));
+			}
+
+			System.out.println("\n-------------------------------------------\n");
 
 			conn.close();
 			System.out.println("Connection closed.");

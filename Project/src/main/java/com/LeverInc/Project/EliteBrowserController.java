@@ -163,7 +163,6 @@ public class EliteBrowserController extends Region {
 		btnForward.setGraphic(new ImageView(forwardImage));
 		btnForward.setTooltip(new Tooltip("Go forward one page"));
         btnForward.setOnAction(e -> engine.executeScript("history.forward()"));
-        
 		
 		// Clears default MenuButton menu items
 		menuButtonFavorites.getItems().clear();
@@ -177,7 +176,7 @@ public class EliteBrowserController extends Region {
 			fav.setOnAction(new EventHandler<ActionEvent>() {
 			    public void handle(ActionEvent e) {
 			        System.out.println(Environment.getFavorites().get(index).getName());
-			        System.out.println(Environment.getFavorites().get(index).getURL());
+			        System.out.println(Environment.getFavorites().get(index).getURL() + "\n");
 			        engine.load(Environment.getFavorites().get(index).getURL());
 			    }
 			});
@@ -187,8 +186,7 @@ public class EliteBrowserController extends Region {
 		
 		// Updates address bar on link clicks
 		engine.locationProperty().addListener((observableValue, oldLac, newLoc) ->
-			getAddress().setText(newLoc) // update the location field.
-			);
+			getAddress().setText(newLoc));	// update the address field
 
 		// Stores current page via WebHistory into History combo box
 		final WebHistory history = engine.getHistory();
@@ -196,7 +194,6 @@ public class EliteBrowserController extends Region {
 		        @Override
 		        public void onChanged(Change<? extends Entry> c) {
 		            c.next();
-		            
 		            StringTokenizer strTokenizer;
 		            
 		            for (Entry e : c.getRemoved()) {
@@ -238,22 +235,6 @@ public class EliteBrowserController extends Region {
 			}
 		});
 	}
-	
-	// Accesses DOM API to get the title of the current web page
-	public String getTitle() {
-	    Document doc = engine.getDocument();
-	    NodeList heads = doc.getElementsByTagName("head");
-	    String titleText = engine.getLocation() ; // use location if page does not define a title
-	    if (heads.getLength() > 0) {
-	        Element head = (Element)heads.item(0);
-	        NodeList titles = head.getElementsByTagName("title");
-	        if (titles.getLength() > 0) {
-	            org.w3c.dom.Node title = titles.item(0);
-	            titleText = title.getTextContent();
-	        }
-	    }
-	    return titleText ;
-	}
 
 	// Corrects user input URL with proper HTML prefix, or defers to Google search
 	public String addressCorrection() {
@@ -284,6 +265,22 @@ public class EliteBrowserController extends Region {
 		engine.reload();
 	}
 	
+	// Accesses DOM API to get the title of the current web page
+	public String getTitle() {
+	    Document doc = engine.getDocument();
+	    NodeList heads = doc.getElementsByTagName("head");
+	    String titleText = engine.getLocation() ; // use location if page does not define a title
+	    if (heads.getLength() > 0) {
+	        Element head = (Element)heads.item(0);
+	        NodeList titles = head.getElementsByTagName("title");
+	        if (titles.getLength() > 0) {
+	            org.w3c.dom.Node title = titles.item(0);
+	            titleText = title.getTextContent();
+	        }
+	    }
+	    return titleText ;
+	}
+	
 	@FXML	// Stores current URL as a Favorite
     public void favoriteClickListener(ActionEvent event) throws SQLException {
 		Favorite newFav = new Favorite(getTitle(), getAddress().getText());
@@ -295,8 +292,7 @@ public class EliteBrowserController extends Region {
 			}
 		}
 		if(unique){
-			//getFavlist().add(newFav);
-			System.out.printf("\nTitle: %s\n", newFav.getName());
+			System.out.printf("Title: %s\n", newFav.getName());
 			System.out.printf("Address: %s\n\n", newFav.getURL());
 			
 			// Adds favorite to Favorites database
@@ -316,13 +312,6 @@ public class EliteBrowserController extends Region {
 			
 			menuButtonFavorites.getItems().addAll(fav);
 		}
-    }
-	
-	@FXML
-    public void onFavItemClick() {
-		System.out.println(favItem.getText());
-		System.out.println("fav clicked");
-		//System.out.println(fav.getText());
     }
 	
 	@FXML	// Displays an "About" window

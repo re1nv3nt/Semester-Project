@@ -10,8 +10,7 @@ public class App extends Application
 {
 	public static void main(String[] args) {
 		// JavaFX GUI to browse the web
-		launch(args);
-		
+		launch(args);		
 	}
 
 	public void start(Stage stage) throws Exception {
