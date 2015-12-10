@@ -2,7 +2,6 @@ package com.LeverInc.Project;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 import org.w3c.dom.Document;
@@ -31,6 +30,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebHistory;
@@ -39,11 +39,12 @@ import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
 public class EliteBrowserController extends Region {
-	private String address = "https://google.com/";
+	private String address = "https://google.com/"; // set to default home page
 	private WebEngine engine;
 	private boolean loadSuccess = true;
-	private ArrayList<Favorite> favlist = new ArrayList<>();
 
+	@FXML
+    public AnchorPane anchor;
 	@FXML
 	private WebView webView;
 	@FXML
@@ -61,11 +62,26 @@ public class EliteBrowserController extends Region {
 	@FXML
     private MenuButton menuButtonFavorites;
 	@FXML
+    private MenuItem favItem;
+	@FXML
     private MenuItem about;
     @FXML
     private MenuItem newWindow;
 	@FXML
 	private MenuItem close;
+	@FXML
+    private MenuItem menuPrefGray;
+	@FXML
+    private MenuItem menuPrefBlue;
+    @FXML
+    private MenuItem menuPrefGreen;
+    @FXML
+    private MenuItem menuPrefPurple;
+    @FXML
+    private MenuItem menuPrefBlack;
+    @FXML
+    private MenuItem menuPrefOrange;
+    
 
 	public TextField getAddress() {
 		return tfAddressBar;
@@ -79,12 +95,41 @@ public class EliteBrowserController extends Region {
 		engine = getView().getEngine();
 		tfAddressBar.setText(address);
 		engine.load(address);
+		
+		anchor.setStyle("-fx-background-color: " + Environment.getWindowColor() + ";");
+		
+		
+		// COLOR PREFERENCES
+		menuPrefGray.setOnAction(new EventHandler<ActionEvent>() {
+		    public void handle(ActionEvent e) {
+		    	anchor.setStyle("-fx-background-color: #F2F2F2;");
+		    	Environment.updatePreference("#F2F2F2");}});
+		menuPrefBlue.setOnAction(new EventHandler<ActionEvent>() {
+		    public void handle(ActionEvent e) {
+		    	anchor.setStyle("-fx-background-color: #0088CC;");
+				Environment.updatePreference("#0088CC");}});
+		menuPrefGreen.setOnAction(new EventHandler<ActionEvent>() {
+		    public void handle(ActionEvent e) {
+		    	anchor.setStyle("-fx-background-color: #33CC33;");
+				Environment.updatePreference("#33CC33");}});
+		menuPrefPurple.setOnAction(new EventHandler<ActionEvent>() {
+		    public void handle(ActionEvent e) {
+		    	anchor.setStyle("-fx-background-color: #CC99FF;");
+				Environment.updatePreference("#CC99FF");}});
+		menuPrefBlack.setOnAction(new EventHandler<ActionEvent>() {
+		    public void handle(ActionEvent e) {
+		    	anchor.setStyle("-fx-background-color: #000000;");
+				Environment.updatePreference("#000000");}});
+		menuPrefOrange.setOnAction(new EventHandler<ActionEvent>() {
+		    public void handle(ActionEvent e) {
+		    	anchor.setStyle("-fx-background-color: #FF9900;");
+				Environment.updatePreference("#FF9900");}});
 
 		// Displays the current URL after successful page load
 		tfAddressBar.setText(engine.getLocation());
 
 		// Address bar helpful tool-tip text and image
-		final Tooltip addressTooltip = new Tooltip("\"Enter your destination URL, and may the force be with you\"");
+		final Tooltip addressTooltip = new Tooltip("Enter your destination URL, and may the force be with you");
 		Image vader = new Image(getClass().getResourceAsStream("Resources/Vader.jpg"));
 		addressTooltip.setGraphic(new ImageView(vader));
 		tfAddressBar.setTooltip(addressTooltip);
@@ -92,19 +137,38 @@ public class EliteBrowserController extends Region {
 		// URL notification label setup
 		Image image = new Image(getClass().getResourceAsStream("Resources/DeathStar.png"));
 		lblURLNote.setGraphic(new ImageView(image));
+		lblURLNote.setTooltip(new Tooltip("Death Star is watching"));
 		
 		// Refresh button graphic
 		Image refreshImage = new Image(getClass().getResourceAsStream("Resources/Refresh.png"));
 		btnRefresh.setGraphic(new ImageView(refreshImage));
+		btnRefresh.setTooltip(new Tooltip("Reload the current page"));
 		
-		// Refresh button graphic
-			Image favoriteImage = new Image(getClass().getResourceAsStream("Resources/Fav.png"));
-			btnFav.setGraphic(new ImageView(favoriteImage));
+		// Favorite button graphic
+		Image favoriteImage = new Image(getClass().getResourceAsStream("Resources/Fav.png"));
+		btnFav.setGraphic(new ImageView(favoriteImage));
+		btnFav.setTooltip(new Tooltip("Mark page as a favorite"));
 		
 		// Clears default MenuButton menu items
 		menuButtonFavorites.getItems().clear();
-		//menuButtonFavorites.getItems()
-
+		
+		// Populates Favorites
+		for(int i = 0; i < Environment.getFavorites().size(); i++){
+			final int index = i;
+			MenuItem fav = new MenuItem(Environment.getFavorites().get(index).getName());
+			
+			// Sets a click event handler for each new favorite item in the favorite menu
+			fav.setOnAction(new EventHandler<ActionEvent>() {
+			    public void handle(ActionEvent e) {
+			        System.out.println(Environment.getFavorites().get(index).getName());
+			        System.out.println(Environment.getFavorites().get(index).getURL());
+			        engine.load(Environment.getFavorites().get(index).getURL());
+			    }
+			});
+			
+			menuButtonFavorites.getItems().addAll(fav);
+		}
+		
 		// Updates address bar on link clicks
 		engine.locationProperty().addListener((observableValue, oldLac, newLoc) ->
 			getAddress().setText(newLoc) // update the location field.
@@ -204,36 +268,45 @@ public class EliteBrowserController extends Region {
 		engine.reload();
 	}
 	
-	public ArrayList<Favorite> getFavlist() {
-		return favlist;
-	}
-	
 	@FXML	// Stores current URL as a Favorite
     public void favoriteClickListener(ActionEvent event) throws SQLException {
 		Favorite newFav = new Favorite(getTitle(), getAddress().getText());
-		boolean unique = true;
 		
-		for(int i = 0; i < getFavlist().size(); i++){
-			if((getFavlist().get(i) != null) && (newFav == getFavlist().get(i))){
+		boolean unique = true;
+		for(int i = 0; i < Environment.getFavorites().size(); i++){
+			if((newFav.equals(Environment.getFavorites().get(i)))){
 				unique = false;
 			}
 		}
 		if(unique){
-			getFavlist().add(newFav);
+			//getFavlist().add(newFav);
+			System.out.printf("\nTitle: %s\n", newFav.getName());
+			System.out.printf("Address: %s\n\n", newFav.getURL());
+			
+			// Adds favorite to Favorites database
+			Environment.addFavorite(newFav.getName(), newFav.getURL());
+			
+			// Adds new favorites to MenuButton list
+			MenuItem fav = new MenuItem(newFav.getName());
+			
+			// Sets a click event handler for each new favorite item in the favorite menu
+			fav.setOnAction(new EventHandler<ActionEvent>() {
+			    public void handle(ActionEvent e) {
+			        System.out.println(newFav.getName());
+			        System.out.println(newFav.getURL());
+			        engine.load(newFav.getURL());
+			    }
+			});
+			
+			menuButtonFavorites.getItems().addAll(fav);
 		}
-		
-		Environment.addFavorite(newFav.getName(), newFav.getURL());
-		
-		// Adds new favorites to MenuButton list
-		menuButtonFavorites.getItems().addAll(new MenuItem(newFav.getName()));
-		System.out.printf("\nTitle: %s\n", newFav.getName());
-		System.out.printf("Address Added: %s\n", newFav.getURL());
     }
 	
 	@FXML
-    public void onFavoriteClick(ActionEvent event) {
-		System.out.println("MenuButton CLicked!");
-		// WORK IN PROGRESS
+    public void onFavItemClick() {
+		System.out.println(favItem.getText());
+		System.out.println("fav clicked");
+		//System.out.println(fav.getText());
     }
 	
 	@FXML	// Displays an "About" window

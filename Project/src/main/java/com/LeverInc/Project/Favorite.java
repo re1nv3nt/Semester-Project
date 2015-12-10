@@ -25,4 +25,17 @@ public class Favorite extends URL{
 		this.url = url;
 	}
 	
+	@Override	// Compares two Favorite objects
+	public boolean equals(Object other) {
+	    if (!(other instanceof Favorite)) {
+	        return false;
+	    }
+
+	    Favorite that = (Favorite) other;
+
+	    // Custom equality check here.
+	    return this.name.equals(that.name)
+	        && this.url.equals(that.url);
+	}
+	
 }

@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class Environment {
 	final static String DB_URL = "jdbc:derby:EliteBrowserDB;create=true";
@@ -14,7 +15,7 @@ public class Environment {
 		Connection conn = null;
 		try {
 			conn = DriverManager.getConnection(DB_URL);
-			System.out.println("Connection created to DB!");
+			System.out.println("[Favorite Insert] Connection created to DB!");
 			
 			Statement stmt = conn.createStatement();
 			String insertFavorite = String.format(
@@ -23,35 +24,82 @@ public class Environment {
 			System.out.println("Favorite added!");
 			
 			conn.close();
-			System.out.println("Connection closed.");
+			System.out.println("[Favorite Insert] Connection closed.");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static ResultSet getFavorites(){
+	// Returns an ArrayList of all favorites stored in the DB
+	public static ArrayList<Favorite> getFavorites(){
 		Connection conn = null;
-		ResultSet result = null;
+		ArrayList<Favorite> favList = new ArrayList<>();
 		
 		try {
 			conn = DriverManager.getConnection(DB_URL);
-			System.out.println("Connection created to DB!");
+			System.out.println("[Favorites Retrieve] Connection created to DB!");
 			
 			Statement stmt = conn.createStatement();
 			String selectStatement = "SELECT Fav_ID, Fav_Name, Fav_URL FROM Favorites";
-			result = stmt.executeQuery(selectStatement);
+			ResultSet result = stmt.executeQuery(selectStatement);
 			
-//			while (result.next()) {
-//				favoritesList.add(arg0)
-//			}
+			while(result.next()){
+				Favorite favObj = new Favorite(result.getString("Fav_Name"), result.getString("Fav_URL"));
+				favList.add(favObj);
+			}
 			
 			conn.close();
-			System.out.println("Connection closed.");
+			System.out.println("[Favorites Retrieve] Connection closed.");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
-		return result;
+		return favList;
+	}
+	
+	public static void updatePreference(String windowColor) {
+		Connection conn = null;
+		try {
+			conn = DriverManager.getConnection(DB_URL);
+			System.out.println("\n[Preference Insert] Connection created to DB!");
+			
+			Statement stmt = conn.createStatement();
+			String updatePreference = "UPDATE Preferences " 
+									+ String.format("SET Window_Color = '%s'", windowColor);
+			
+			stmt.executeUpdate(updatePreference);
+			System.out.println("Preferences added!");
+			
+			conn.close();
+			System.out.println("[Preference Insert] Connection closed.\n");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static String getWindowColor(){
+		Connection conn = null;
+		String color = null;
+		
+		try {
+			conn = DriverManager.getConnection(DB_URL);
+			System.out.println("[Window Color Retrieve] Connection created to DB!");
+			
+			Statement stmt = conn.createStatement();
+			String selectStatement = "SELECT Window_Color FROM Preferences";
+			ResultSet result = stmt.executeQuery(selectStatement);
+			
+			while(result.next()){
+				color = result.getString("Window_Color");
+			}
+			
+			conn.close();
+			System.out.println("[Window Color Retrieve] Connection closed.");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return color;
 	}
 	
 }

@@ -9,7 +9,7 @@ import java.sql.Statement;
 public class Database {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		
 		try {
 			// Create and load the database
 			Connection conn = DriverManager.getConnection(Environment.DB_URL);
@@ -38,11 +38,11 @@ public class Database {
 			stmt.execute(sqlCreateTable);
 			// TABLE IS CREATED!
 
-//			addFavorite(conn, "Google", "google.com");
-//			addFavorite(conn, "Amazon", "amazon.com");
-//			addFavorite(conn, "Facebook", "facebook.com");
-//			addFavorite(conn, "Twitch", "twitch.tv");
-//			addFavorite(conn, "CNN", "cnn.com");
+//			Environment.addFavorite("Google", "google.com");
+//			Environment.addFavorite("Amazon", "amazon.com");
+//			Environment.addFavorite("Facebook", "facebook.com");
+//			Environment.addFavorite("Twitch", "twitch.tv");
+//			Environment.addFavorite("CNN", "cnn.com");
 
 			String selectStatement = "SELECT Fav_ID, Fav_Name, Fav_URL FROM Favorites";
 			ResultSet result = stmt.executeQuery(selectStatement);
@@ -52,9 +52,31 @@ public class Database {
 
 			while (result.next()) {
 				System.out.printf("%-4d %-10s %-10s\n", result.getInt("Fav_ID"), result.getString("Fav_Name"), result.getString("Fav_URL"));
+				//System.out.printf("%d \t %s\n", result.getInt("Fav_ID"), result.getString("Fav_Name"));
+				//System.out.printf("\t %s \n\n", result.getString("Fav_URL"));
 			}
 
 			System.out.println("\n-------------------------------------------\n");
+			
+			try {
+				String dropTable = "drop table Preferences";
+				stmt.execute(dropTable);
+				System.out.println("Preferences table dropped.");
+			} catch (SQLException e) {
+				System.out.println("Preferences table does not exist.");
+			}
+
+			// 2. Make a SQL statement to create the table
+			sqlCreateTable = "CREATE Table Preferences(" 
+							+ " Window_Color varchar(50) NOT NULL PRIMARY KEY)";
+
+			// 3. Execute the statement
+			stmt.execute(sqlCreateTable);
+			// TABLE IS CREATED!
+			
+			String insertPreference = String.format(
+					"INSERT into Preferences(Window_Color)" + " values ('#F9F9F9')");
+			stmt.executeUpdate(insertPreference);
 
 			conn.close();
 			System.out.println("Connection closed.");
