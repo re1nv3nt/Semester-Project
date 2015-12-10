@@ -1,5 +1,6 @@
 package com.LeverInc.Project;
 
+// REQ #6
 public class Favorite extends URL{
 	private String name = "";
 

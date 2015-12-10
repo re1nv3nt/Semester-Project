@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class Environment {
 	final static String DB_URL = "jdbc:derby:EliteBrowserDB;create=true";
 	
+	// REQ #7
 	// Method for inserting new favorite url(s) into Favorites Table
 	public static void addFavorite(String favName, String favURL) {
 		Connection conn = null;
@@ -30,6 +31,7 @@ public class Environment {
 		}
 	}
 	
+	// REQ #8
 	// Returns an ArrayList of all favorites stored in the DB
 	public static ArrayList<Favorite> getFavorites(){
 		Connection conn = null;

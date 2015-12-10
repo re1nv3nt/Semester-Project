@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+// REQ #4
 public class Database implements Launch {
 
 	public static void main(String[] args) {
@@ -18,7 +19,8 @@ public class Database implements Launch {
 			// CREATE A TABLE
 			// 1. Create a Statement from the database connection
 			Statement stmt = conn.createStatement();
-
+			
+			// REQ #11
 			try {
 				String dropTable = "drop table Favorites";
 				stmt.execute(dropTable);

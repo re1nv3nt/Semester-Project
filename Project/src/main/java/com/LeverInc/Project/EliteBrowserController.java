@@ -235,6 +235,7 @@ public class EliteBrowserController extends Region {
 		                comboHistory.getItems().remove(e.getUrl());
 		            }
 		            for (Entry e : c.getAddedSubList()) {
+		            	// REQ #2
 		                strTokenizer = new StringTokenizer(e.getUrl(), "?");
 		            	comboHistory.getItems().add(strTokenizer.nextToken());
 		            }
@@ -349,6 +350,7 @@ public class EliteBrowserController extends Region {
 		}
     }
 	
+	// REQ #1
 	@FXML	// Displays an "About" window
     public void aboutButton(ActionEvent event) throws IOException {
     	Parent root = FXMLLoader.load(getClass().getResource("About.fxml"));
