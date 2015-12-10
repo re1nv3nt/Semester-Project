@@ -50,17 +50,21 @@ public class EliteBrowserController extends Region {
 	@FXML
 	private TextField tfAddressBar;
 	@FXML
+    private Button btnBack;
+	@FXML
+    private Button btnForward;
+	@FXML
     private Label lblURLNote;
 	@FXML
 	private Button btnRefresh;
 	@FXML
     private Button btnFav;
 	@FXML
-	private MenuBar MenuBar;
-	@FXML
 	private ComboBox<String> comboHistory;
 	@FXML
     private MenuButton menuButtonFavorites;
+	@FXML
+	private MenuBar MenuBar;
 	@FXML
     private MenuItem favItem;
 	@FXML
@@ -95,11 +99,10 @@ public class EliteBrowserController extends Region {
 		engine = getView().getEngine();
 		tfAddressBar.setText(address);
 		engine.load(address);
-		
-		anchor.setStyle("-fx-background-color: " + Environment.getWindowColor() + ";");
-		
-		
+
 		// COLOR PREFERENCES
+        anchor.setStyle("-fx-background-color: " + Environment.getWindowColor() + ";");
+		
 		menuPrefGray.setOnAction(new EventHandler<ActionEvent>() {
 		    public void handle(ActionEvent e) {
 		    	anchor.setStyle("-fx-background-color: #F2F2F2;");
@@ -139,15 +142,28 @@ public class EliteBrowserController extends Region {
 		lblURLNote.setGraphic(new ImageView(image));
 		lblURLNote.setTooltip(new Tooltip("Death Star is watching"));
 		
-		// Refresh button graphic
+		// Refresh button setup
 		Image refreshImage = new Image(getClass().getResourceAsStream("Resources/Refresh.png"));
 		btnRefresh.setGraphic(new ImageView(refreshImage));
 		btnRefresh.setTooltip(new Tooltip("Reload the current page"));
 		
-		// Favorite button graphic
+		// Favorite button setup
 		Image favoriteImage = new Image(getClass().getResourceAsStream("Resources/Fav.png"));
 		btnFav.setGraphic(new ImageView(favoriteImage));
 		btnFav.setTooltip(new Tooltip("Mark page as a favorite"));
+		
+		// Back button setup
+		Image backImage = new Image(getClass().getResourceAsStream("Resources/Back.png"));
+		btnBack.setGraphic(new ImageView(backImage));
+		btnBack.setTooltip(new Tooltip("Go back one page"));
+		btnBack.setOnAction(e -> engine.executeScript("history.back()"));
+		
+		// Forward button setup
+		Image forwardImage = new Image(getClass().getResourceAsStream("Resources/Forward.png"));
+		btnForward.setGraphic(new ImageView(forwardImage));
+		btnForward.setTooltip(new Tooltip("Go forward one page"));
+        btnForward.setOnAction(e -> engine.executeScript("history.forward()"));
+        
 		
 		// Clears default MenuButton menu items
 		menuButtonFavorites.getItems().clear();

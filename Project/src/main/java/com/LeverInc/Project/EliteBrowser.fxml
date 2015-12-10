@@ -6,15 +6,15 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="anchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="491.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.LeverInc.Project.EliteBrowserController">
+<AnchorPane fx:id="anchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="491.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.LeverInc.Project.EliteBrowserController">
    <children>
-      <TextField fx:id="tfAddressBar" layoutX="43.0" layoutY="39.0" minWidth="100.0" onKeyReleased="#onEnterPress" prefHeight="30.0" prefWidth="348.0" promptText="Enter html address here" AnchorPane.leftAnchor="43.0" AnchorPane.rightAnchor="209.0" AnchorPane.topAnchor="39.0">
+      <TextField fx:id="tfAddressBar" layoutX="136.0" layoutY="39.0" minWidth="100.0" onKeyReleased="#onEnterPress" prefHeight="30.0" prefWidth="405.0" promptText="Enter html address here" AnchorPane.leftAnchor="136.0" AnchorPane.rightAnchor="209.0" AnchorPane.topAnchor="39.0">
          <font>
             <Font size="14.0" />
          </font></TextField>
       <WebView fx:id="webView" layoutX="200.0" layoutY="76.0" prefHeight="414.0" prefWidth="598.0" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="76.0" />
       <Button fx:id="btnRefresh" layoutX="398.0" layoutY="39.0" mnemonicParsing="false" onAction="#refreshClickListener" prefHeight="30.0" prefWidth="36.0" AnchorPane.rightAnchor="166.0" AnchorPane.topAnchor="39.0" />
-      <MenuBar fx:id="MenuBar" layoutX="5.0" layoutY="2.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
+      <MenuBar fx:id="MenuBar" layoutX="5.0" layoutY="6.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="6.0">
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
@@ -49,7 +49,9 @@
       </MenuBar>
       <ComboBox fx:id="comboHistory" layoutX="508.0" layoutY="3.0" prefHeight="30.0" prefWidth="108.0" promptText="History" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="3.0" />
       <Button fx:id="btnFav" layoutX="441.0" layoutY="39.0" mnemonicParsing="false" onAction="#favoriteClickListener" prefHeight="30.0" prefWidth="36.0" AnchorPane.rightAnchor="123.0" AnchorPane.topAnchor="39.0" />
-      <Label fx:id="lblURLNote" layoutX="5.0" layoutY="39.0" prefHeight="30.0" prefWidth="36.0" style="-fx-border-width: 1;" />
+      <Label fx:id="lblURLNote" layoutX="97.0" layoutY="39.0" prefHeight="30.0" prefWidth="36.0" style="-fx-border-width: 1;" />
       <MenuButton fx:id="menuButtonFavorites" layoutX="508.0" layoutY="39.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="108.0" text="Favorites" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="39.0" />
+      <Button fx:id="btnBack" layoutX="5.0" layoutY="39.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="36.0" />
+      <Button fx:id="btnForward" layoutX="49.0" layoutY="39.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="36.0" />
    </children>
 </AnchorPane>
