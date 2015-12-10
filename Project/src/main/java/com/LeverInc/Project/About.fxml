@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="236.0" prefWidth="403.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <TextArea editable="false" layoutX="13.0" layoutY="100.0" prefHeight="200.0" prefWidth="174.0" text="The EliteBrowser is blah blah blah&#10;" wrapText="true" />
+      <TextArea editable="false" layoutX="5.0" layoutY="4.0" prefHeight="229.0" prefWidth="393.0" text="Elite Browser is a simple and fun student project web browser.  Features include:&#10;&#10;+ favorites list&#10;+ browsing history&#10;+ window color customization&#10;+ Bing! blocker&#10;+ star wars cameos&#10;&#10;Elite Browser by Lever, Inc.&#10;Team:  Kirby &amp; Alex&#10;&#10;" wrapText="true">
+         <font>
+            <Font size="13.0" />
+         </font></TextArea>
    </children>
 </AnchorPane>

@@ -18,6 +18,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -200,7 +202,23 @@ public class EliteBrowserController extends Region {
 		            StringTokenizer strTokenizer;
 		            
 		            // Changes Notification icon to the right of address bar 
-		            if(HTTPS.isHTTPS(engine.getLocation())){
+		            if(engine.getLocation().startsWith("https://www.bing")
+		            		|| engine.getLocation().startsWith("http://www.bing")
+		            		|| engine.getLocation().startsWith("www.bing")){
+		            	try {
+							throw new BingBlockerException(engine.getLocation());
+						} catch (BingBlockerException e1) {
+							engine.load("https://www.google.com/");
+							Alert alert = new Alert(AlertType.WARNING);
+							alert.setTitle("Restricted Access");
+							alert.setHeaderText("Were you trying to search Bing?");
+							alert.setContentText(e1.getMessage());
+							//Optional<ButtonType> result = 
+									alert.showAndWait();
+							e1.getMessage();
+							//e1.printStackTrace();
+						}
+		            } else if (HTTPS.isHTTPS(engine.getLocation())){
 		    			//System.out.println("Browsing HTTPS site!\n");
 		    			lblURLNote.setGraphic(new ImageView(sslImg));
 		    			lblURLNote.setTooltip(sslTip);
@@ -260,7 +278,7 @@ public class EliteBrowserController extends Region {
 		if (address.contains(" ")) {
 			address = "https://www.google.com/search?q=" + address.trim().replaceAll(" ", "+");
 		} else if (!(address.startsWith("http://") || address.startsWith("https://")) && !address.isEmpty()) {
-			address = "http://www." + address; // default to http prefix
+			address = "http://" + address; // default to http prefix
 		}
 		return address;
 	}
@@ -335,7 +353,7 @@ public class EliteBrowserController extends Region {
     public void aboutButton(ActionEvent event) throws IOException {
     	Parent root = FXMLLoader.load(getClass().getResource("About.fxml"));
     	Stage stage = new Stage();
-    	stage.setScene(new Scene(root, 200, 400));
+    	stage.setScene(new Scene(root));
     	stage.show();
     }
 	
