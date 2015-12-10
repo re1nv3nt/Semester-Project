@@ -283,7 +283,7 @@ public class EliteBrowserController extends Region {
 	
 	@FXML	// Stores current URL as a Favorite
     public void favoriteClickListener(ActionEvent event) throws SQLException {
-		Favorite newFav = new Favorite(getTitle(), getAddress().getText());
+		Favorite newFav = new Favorite(getTitle(), engine.getLocation());
 		
 		boolean unique = true;
 		for(int i = 0; i < Environment.getFavorites().size(); i++){
