@@ -59,6 +59,7 @@ public class Environment {
 		return favList;
 	}
 	
+	// Updates anchor pane color preference
 	public static void updatePreference(String windowColor) {
 		Connection conn = null;
 		try {
@@ -70,7 +71,7 @@ public class Environment {
 									+ String.format("SET Window_Color = '%s'", windowColor);
 			
 			stmt.executeUpdate(updatePreference);
-			System.out.println(" >> Preferences added!");
+			System.out.println(" >> Preferences Updated!");
 			
 			conn.close();
 			System.out.println("[Preference Insert] Connection closed.\n");
@@ -79,6 +80,7 @@ public class Environment {
 		}
 	}
 	
+	// Retrieves anchor pane color preference 
 	public static String getWindowColor(){
 		Connection conn = null;
 		String color = null;

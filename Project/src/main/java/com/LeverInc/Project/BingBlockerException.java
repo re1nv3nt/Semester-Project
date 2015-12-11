@@ -2,7 +2,7 @@ package com.LeverInc.Project;
 
 // REQ #12
 public class BingBlockerException extends Exception{
-	
+
 	/**
 	 * 
 	 */

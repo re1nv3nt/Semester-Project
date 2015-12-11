@@ -194,24 +194,8 @@ public class EliteBrowserController extends Region {
 			
 			getAddress().setText(newLoc);
 			
-			 // Changes Notification icon to the right of address bar 
-            if(engine.getLocation().startsWith("https://www.bing")
-            		|| engine.getLocation().startsWith("http://www.bing")
-            		|| engine.getLocation().startsWith("www.bing")){
-            	try {
-					throw new BingBlockerException(engine.getLocation());
-				} catch (BingBlockerException e1) {
-					engine.load("https://www.google.com/");
-					Alert alert = new Alert(AlertType.WARNING);
-					alert.setTitle("Restricted Access");
-					alert.setHeaderText("Were you trying to search Bing?");
-					alert.setContentText(e1.getMessage());
-					//Optional<ButtonType> result = 
-							alert.showAndWait();
-					e1.getMessage();
-					//e1.printStackTrace();
-				}
-            } else if (HTTPS.isHTTPS(engine.getLocation())){
+			// Changes Notification icon to the right of address bar 
+            if (HTTPS.isHTTPS(engine.getLocation())){
     			//System.out.println("Browsing HTTPS site!\n");
     			lblURLNote.setGraphic(new ImageView(sslImg));
     			lblURLNote.setTooltip(sslTip);
@@ -231,6 +215,25 @@ public class EliteBrowserController extends Region {
 		        @Override
 		        public void onChanged(Change<? extends Entry> c) {
 		            c.next();
+		            
+		            // Restricts access to Bing!
+		            if(engine.getLocation().startsWith("https://www.bing")
+		            		|| engine.getLocation().startsWith("http://www.bing")
+		            		|| engine.getLocation().startsWith("www.bing")){
+		            	try {
+							throw new BingBlockerException(engine.getLocation());
+						} catch (BingBlockerException e1) {
+							engine.load("https://www.google.com/");
+							Alert alert = new Alert(AlertType.WARNING);
+							alert.setTitle("Restricted Access");
+							alert.setHeaderText("Were you trying to search Bing?");
+							alert.setContentText(e1.getMessage());
+							//Optional<ButtonType> result = 
+									alert.show();
+							//e1.getMessage();
+							//e1.printStackTrace();
+						}
+		            }
 		            
 		            StringTokenizer strTokenizer;
 		            
