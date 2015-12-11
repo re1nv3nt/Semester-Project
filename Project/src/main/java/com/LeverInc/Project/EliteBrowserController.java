@@ -190,8 +190,23 @@ public class EliteBrowserController extends Region {
 		}
 		
 		// Updates address bar on link clicks
-		engine.locationProperty().addListener((observableValue, oldLac, newLoc) ->
-			getAddress().setText(newLoc));	// update the address field
+		engine.locationProperty().addListener((observableValue, oldLac, newLoc) -> {
+			
+			getAddress().setText(newLoc);
+			
+			if (HTTPS.isHTTPS(engine.getLocation())){
+    			//System.out.println("Browsing HTTPS site!\n");
+    			lblURLNote.setGraphic(new ImageView(sslImg));
+    			lblURLNote.setTooltip(sslTip);
+    		} else if (EDU.isEDU(engine.getLocation())){
+    			lblURLNote.setGraphic(new ImageView(eduImg));
+    			lblURLNote.setTooltip(eduTip);
+    		} else{
+    			lblURLNote.setGraphic(new ImageView(deathStarImg));
+    			lblURLNote.setTooltip(normTip);
+    		}
+			
+		});
 
 		// Stores current page via WebHistory into History combo box
 		final WebHistory history = engine.getHistory();
