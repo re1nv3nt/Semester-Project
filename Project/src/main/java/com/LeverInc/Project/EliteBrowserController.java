@@ -180,8 +180,8 @@ public class EliteBrowserController extends Region {
 			// Sets a click event handler for each new favorite item in the favorite menu
 			fav.setOnAction(new EventHandler<ActionEvent>() {
 			    public void handle(ActionEvent e) {
-			        System.out.println(Environment.getFavorites().get(index).getName());
-			        System.out.println(Environment.getFavorites().get(index).getURL() + "\n");
+			        //System.out.println(Environment.getFavorites().get(index).getName());
+			        //System.out.println(Environment.getFavorites().get(index).getURL() + "\n");
 			        engine.load(Environment.getFavorites().get(index).getURL());
 			    }
 			});
@@ -194,7 +194,24 @@ public class EliteBrowserController extends Region {
 			
 			getAddress().setText(newLoc);
 			
-			if (HTTPS.isHTTPS(engine.getLocation())){
+			 // Changes Notification icon to the right of address bar 
+            if(engine.getLocation().startsWith("https://www.bing")
+            		|| engine.getLocation().startsWith("http://www.bing")
+            		|| engine.getLocation().startsWith("www.bing")){
+            	try {
+					throw new BingBlockerException(engine.getLocation());
+				} catch (BingBlockerException e1) {
+					engine.load("https://www.google.com/");
+					Alert alert = new Alert(AlertType.WARNING);
+					alert.setTitle("Restricted Access");
+					alert.setHeaderText("Were you trying to search Bing?");
+					alert.setContentText(e1.getMessage());
+					//Optional<ButtonType> result = 
+							alert.showAndWait();
+					e1.getMessage();
+					//e1.printStackTrace();
+				}
+            } else if (HTTPS.isHTTPS(engine.getLocation())){
     			//System.out.println("Browsing HTTPS site!\n");
     			lblURLNote.setGraphic(new ImageView(sslImg));
     			lblURLNote.setTooltip(sslTip);
@@ -214,36 +231,8 @@ public class EliteBrowserController extends Region {
 		        @Override
 		        public void onChanged(Change<? extends Entry> c) {
 		            c.next();
-		            StringTokenizer strTokenizer;
 		            
-		            // Changes Notification icon to the right of address bar 
-		            if(engine.getLocation().startsWith("https://www.bing")
-		            		|| engine.getLocation().startsWith("http://www.bing")
-		            		|| engine.getLocation().startsWith("www.bing")){
-		            	try {
-							throw new BingBlockerException(engine.getLocation());
-						} catch (BingBlockerException e1) {
-							engine.load("https://www.google.com/");
-							Alert alert = new Alert(AlertType.WARNING);
-							alert.setTitle("Restricted Access");
-							alert.setHeaderText("Were you trying to search Bing?");
-							alert.setContentText(e1.getMessage());
-							//Optional<ButtonType> result = 
-									alert.showAndWait();
-							e1.getMessage();
-							//e1.printStackTrace();
-						}
-		            } else if (HTTPS.isHTTPS(engine.getLocation())){
-		    			//System.out.println("Browsing HTTPS site!\n");
-		    			lblURLNote.setGraphic(new ImageView(sslImg));
-		    			lblURLNote.setTooltip(sslTip);
-		    		} else if (EDU.isEDU(engine.getLocation())){
-		    			lblURLNote.setGraphic(new ImageView(eduImg));
-		    			lblURLNote.setTooltip(eduTip);
-		    		} else{
-		    			lblURLNote.setGraphic(new ImageView(deathStarImg));
-		    			lblURLNote.setTooltip(normTip);
-		    		}
+		            StringTokenizer strTokenizer;
 		            
 		            // Get url from WebHistory and adds it to History ComboBox
 		            for (Entry e : c.getRemoved()) {
@@ -329,7 +318,7 @@ public class EliteBrowserController extends Region {
 	            titleText = title.getTextContent();
 	        }
 	    }
-	    return titleText ;
+	    return titleText.trim() ;
 	}
 	
 	@FXML	// Stores current URL as a Favorite
